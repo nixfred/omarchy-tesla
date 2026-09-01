@@ -535,12 +535,29 @@ Panel {
   // beside it while the car was moving, which made the bar shuffle every time
   // a car pulled away. A lot of movement in the corner of your eye to say
   // something the panel says better. The colour carries it instead.
-  implicitWidth: button.implicitWidth
+  // vic: the remaining range rides beside the mark, as "183 mi", in the same
+  // cell style the shell's battery widget uses for its percentage. It is the
+  // last reading the panel already holds, so it costs the car nothing extra;
+  // it is blank until a reading exists and ages with it. `showRange` turns it
+  // off for anyone who wants the mark alone, as upstream ships it.
+  readonly property bool showRange: setting("showRange", true)
+  readonly property string barRange:
+    showRange && hasReading && reading.range !== null && reading.range !== undefined
+      ? Math.round(reading.range) + (reading.range_unit ? " " + reading.range_unit : "")
+      : ""
+
+  implicitWidth: barRow.implicitWidth
   implicitHeight: button.implicitHeight
+
+  Row {
+    id: barRow
+    anchors.left: parent.left
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    spacing: 0
 
   BarIconButton {
     id: button
-    anchors.left: parent.left
     anchors.top: parent.top
     anchors.bottom: parent.bottom
     bar: root.bar
@@ -578,6 +595,26 @@ Panel {
       }
       root.toggle()
     }
+  }
+
+  // The number. Same colour rules as the mark so the two read as one widget:
+  // green while driving, dimmed while asleep. Its own cell rather than text
+  // inside the icon slot because the mark is a Shape, not a glyph, and the
+  // shell's icon button only knows how to typeset one or the other.
+  WidgetButton {
+    id: rangeLabel
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    bar: root.bar
+    text: root.barRange
+    fontSize: Style.font.bodySmall
+    horizontalMargin: 4
+    active: root.driving
+    activeColor: root.liveGreen
+    dimmed: root.asleep || root.errorText !== ""
+    tooltipText: button.tooltipText
+    onPressed: function(b) { button.pressed(b) }
+  }
   }
 
   // ------------------------------------------------------------------- panel
