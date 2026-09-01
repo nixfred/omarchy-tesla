@@ -43,7 +43,7 @@
         "type": "boolean",
         "label": "Show the range in the bar",
         "defaultValue": true,
-        "description": "Shows the remaining range as the bar item, in whatever unit the car's own screen uses, instead of the Tesla mark. It is the last reading the panel holds, so it asks the car for nothing extra; off gives you the bare mark."
+        "description": "Shows the remaining range as the bar item, just the number in whatever unit the car's own screen uses, instead of the Tesla mark. It is the last reading the panel holds, so it asks the car for nothing extra; off gives you the bare mark."
       },
       {
         "key": "mapStyle",

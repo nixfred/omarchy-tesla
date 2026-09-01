@@ -535,7 +535,8 @@ Panel {
   // beside it while the car was moving, which made the bar shuffle every time
   // a car pulled away. A lot of movement in the corner of your eye to say
   // something the panel says better. The colour carries it instead.
-  // vic: the remaining range rides beside the mark, as "183 mi", in the same
+  // vic: the remaining range is the bar item, as "183" (the unit is in the
+  // tooltip and the panel; the bar is for the number you glance at), in the same
   // cell style the shell's battery widget uses for its percentage. It is the
   // last reading the panel already holds, so it costs the car nothing extra;
   // it is blank until a reading exists and ages with it. `showRange` turns it
@@ -543,7 +544,7 @@ Panel {
   readonly property bool showRange: setting("showRange", true)
   readonly property string barRange:
     showRange && hasReading && reading.range !== null && reading.range !== undefined
-      ? Math.round(reading.range) + (reading.range_unit ? " " + reading.range_unit : "")
+      ? String(Math.round(reading.range))
       : ""
 
   implicitWidth: barRow.implicitWidth
