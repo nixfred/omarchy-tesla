@@ -561,6 +561,10 @@ Panel {
     anchors.top: parent.top
     anchors.bottom: parent.bottom
     bar: root.bar
+    // vic: the number is the widget. The mark only stands in while there is
+    // no reading to show (first start, signed out), so there is always
+    // something in the bar to click.
+    visible: root.barRange === ""
 
     iconComponent: Component {
       TeslaMark {
@@ -608,7 +612,7 @@ Panel {
     bar: root.bar
     text: root.barRange
     fontSize: Style.font.bodySmall
-    horizontalMargin: 4
+    horizontalMargin: 6
     active: root.driving
     activeColor: root.liveGreen
     dimmed: root.asleep || root.errorText !== ""
@@ -621,7 +625,7 @@ Panel {
 
   PopupCard {
     id: popup
-    anchorItem: button
+    anchorItem: root.barRange !== "" ? rangeLabel : button
     bar: root.bar
     owner: root
     open: root.opened
